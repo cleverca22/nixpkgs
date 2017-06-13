@@ -783,6 +783,14 @@ self: super: {
   # https://github.com/aslatter/parsec/issues/68
   parsec = doJailbreak super.parsec;
 
+  # without deadcode elimination, purescript requires this change keep the closure from being 2.9gig
+  purescript = if pkgs.stdenv.isDarwin then super.purescript.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.removeReferencesTo ];
+    postInstall = ''
+      remove-references-to -t ${super.warp} $out/bin/purs
+    '';
+  }) else super.purescript;
+
   # Don't depend on chell-quickcheck, which doesn't compile due to restricting
   # QuickCheck to versions ">=2.3 && <2.9".
   system-filepath = dontCheck super.system-filepath;

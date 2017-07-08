@@ -24,7 +24,7 @@ self: super: {
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
 
   # Link statically to avoid runtime dependency on GHC.
-  jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
+  jailbreak-cabal = hasNoDataOutput ((disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; });
 
   # enable using a local hoogle with extra packagages in the database
   # nix-shell -p "haskellPackages.hoogleLocal (with haskellPackages; [ mtl lens ])"
@@ -32,7 +32,7 @@ self: super: {
   hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
 
   # Break infinite recursions.
-  clock = dontCheck super.clock;
+  clock = hasNoDataOutput (dontCheck super.clock);
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
@@ -66,6 +66,7 @@ self: super: {
   git-annex = (overrideCabal (super.git-annex.overrideScope (self: super: {
       optparse-applicative = self.optparse-applicative_0_14_0_0;
     })) (drv: {
+    hasDataDir = false;
     src = pkgs.fetchgit {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
@@ -287,7 +288,7 @@ self: super: {
   DigitalOcean = dontCheck super.DigitalOcean;
   direct-sqlite = dontCheck super.direct-sqlite;
   directory-layout = dontCheck super.directory-layout;
-  dlist = dontCheck super.dlist;
+  dlist = hasNoDataOutput (dontCheck super.dlist);
   docopt = dontCheck super.docopt;                      # http://hydra.cryp.to/build/499172/log/raw
   dom-selector = dontCheck super.dom-selector;          # http://hydra.cryp.to/build/497670/log/raw
   dotfs = dontCheck super.dotfs;                        # http://hydra.cryp.to/build/498599/log/raw
@@ -344,7 +345,7 @@ self: super: {
   milena = dontCheck super.milena;
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
-  network = dontCheck super.network;
+  network = hasNoDataOutput (dontCheck super.network);
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
@@ -488,7 +489,7 @@ self: super: {
   csound-expression-dynamic = dontHaddock super.csound-expression-dynamic;
 
   # Test suite won't compile against tasty-hunit 0.9.x.
-  zlib = dontCheck super.zlib;
+  zlib = hasNoDataOutput (dontCheck super.zlib);
 
   # https://github.com/ndmitchell/shake/issues/206
   # https://github.com/ndmitchell/shake/issues/267
@@ -736,7 +737,7 @@ self: super: {
       };
     in overrideCabal super.servant (old: {
       postInstall = old.postInstall or "" + ''
-        ln -s ${docs} $out/share/doc/servant
+        ln -s ${docs} $doc/share/doc/servant
       '';
     });
 
@@ -875,5 +876,65 @@ self: super: {
 
   # Needs a newer version of hsyslog than lts-8.x provides.
   logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
+
+  # packages that lack a data output
+  void = hasNoDataOutput super.void;
+  utf8-string = hasNoDataOutput super.utf8-string;
+  utf8-light = hasNoDataOutput super.utf8-light;
+  unix-compat = hasNoDataOutput super.unix-compat;
+  unbounded-delays = hasNoDataOutput super.unbounded-delays;
+  transformers-compat = hasNoDataOutput super.transformers-compat;
+  tagged = hasNoDataOutput super.tagged;
+  th-lift = hasNoDataOutput super.th-lift;
+  disk-free-space = hasNoDataOutput super.disk-free-space;
+  ansi-terminal = hasNoDataOutput super.ansi-terminal;
+  ansi-wl-pprint = hasNoDataOutput super.ansi-wl-pprint;
+  appar = hasNoDataOutput super.appar;
+  magic = hasNoDataOutput super.magic;
+  auto-update = hasNoDataOutput super.auto-update;
+  mountpoints = hasNoDataOutput super.mountpoints;
+  base16-bytestring = hasNoDataOutput super.base16-bytestring;
+  mtl = hasNoDataOutput super.mtl;
+  IfElse = hasNoDataOutput super.IfElse;
+  byteorder = hasNoDataOutput super.byteorder;
+  bytestring-builder = hasNoDataOutput super.bytestring-builder;
+  network-info = hasNoDataOutput super.network-info;
+  cabal-doctest = hasNoDataOutput super.cabal-doctest;
+  network-multicast = hasNoDataOutput super.network-multicast;
+  old-locale = hasNoDataOutput super.old-locale;
+  code-page = hasNoDataOutput super.code-page;
+  hslogger = hasNoDataOutput super.hslogger;
+  cmdargs = hasNoDataOutput super.cmdargs;
+  random = hasNoDataOutput super.random;
+  data-default-class = hasNoDataOutput super.data-default-class;
+  stm = hasNoDataOutput super.stm;
+  stm-chans = hasNoDataOutput super.stm-chans;
+  data-default-instances-containers = hasNoDataOutput super.data-default-instances-containers;
+  text = hasNoDataOutput super.text;
+  data-default-instances-dlist = hasNoDataOutput super.data-default-instances-dlist;
+  data-default-instances-old-locale = hasNoDataOutput super.data-default-instances-old-locale;
+  data-default = hasNoDataOutput super.data-default;
+  StateVar = hasNoDataOutput super.StateVar;
+  digest = hasNoDataOutput super.digest;
+  easy-file = hasNoDataOutput super.easy-file;
+  entropy = hasNoDataOutput super.entropy;
+  extensible-exceptions = hasNoDataOutput super.extensible-exceptions;
+  file-embed = hasNoDataOutput super.file-embed;
+  fail = hasNoDataOutput super.fail;
+  generics-sop = hasNoDataOutput super.generics-sop;
+  mime-types = hasNoDataOutput super.mime-types;
+  ghc-paths = hasNoDataOutput super.ghc-paths;
+  mmorph = hasNoDataOutput super.mmorph;
+  haskell-lexer = hasNoDataOutput super.haskell-lexer;
+  old-time = hasNoDataOutput super.old-time;
+  hex = hasNoDataOutput super.hex;
+  pcre-light = hasNoDataOutput super.pcre-light;
+  hostname = hasNoDataOutput super.hostname;
+  prelude-extras = hasNoDataOutput super.prelude-extras;
+  hxt-charproperties = hasNoDataOutput super.hxt-charproperties;
+  hxt-unicode = hasNoDataOutput super.hxt-unicode;
+  primitive = hasNoDataOutput super.primitive;
+  regex-base = hasNoDataOutput super.regex-base;
+  logict = hasNoDataOutput super.logict;
 
 }

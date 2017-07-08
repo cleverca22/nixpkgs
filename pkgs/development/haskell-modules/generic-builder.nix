@@ -53,6 +53,8 @@
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 , hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hasDataDir ? true
+, hasDocDir ? true
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -108,8 +110,8 @@ let
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
-    "--datadir=$data/share/${ghc.name}"
-    "--docdir=$doc/share/doc"
+    (optionalString hasDataDir "--datadir=$data/share/${ghc.name}")
+    (optionalString hasDocDir "--docdir=$doc/share/doc")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
@@ -175,7 +177,7 @@ assert allPkgconfigDepends != [] -> pkgconfig != null;
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
 
-  outputs = [ "out" "data" "doc" ];
+  outputs = [ "out" ] ++ (optional hasDataDir "data") ++ (optional hasDocDir "doc");
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -331,7 +333,8 @@ stdenv.mkDerivation ({
     for x in $doc/share/doc/html/src/*.html; do
       remove-references-to -t $out $x
     done
-    mkdir -p $data
+
+    mkdir -p $doc ${optionalString hasDataDir "$data"}
 
     runHook postInstall
   '';

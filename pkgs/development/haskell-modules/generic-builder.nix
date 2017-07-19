@@ -177,7 +177,7 @@ assert allPkgconfigDepends != [] -> pkgconfig != null;
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
 
-  outputs = [ "out" ] ++ (optional hasDataDir "data") ++ (optional hasDocDir "doc");
+  outputs = if (args ? outputs) then args.outputs else ([ "out" ] ++ (optional hasDataDir "data") ++ (optional hasDocDir "doc"));
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;

@@ -178,8 +178,8 @@ in rec {
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "b76e282da8824b679368370e43c994e588994a9a";
-      sha256 = "11clfc8fh8q8s3k4canmn36xhh3zcl2zd8wwddp4pdvdal16b5n6";
+      rev = "43f8ef73c6aeb23aee40d485556004d6262d4e3b";
+      sha256 = "0sz19b604s25kdmz0pp7pz5xrwnfr9vz0l9vaslq6j820yfw72bc";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

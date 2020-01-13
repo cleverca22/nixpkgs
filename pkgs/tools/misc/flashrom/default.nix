@@ -1,12 +1,13 @@
-{ lib, stdenv, fetchurl, pkgconfig, libftdi, pciutils }:
+{ lib, stdenv, pkgconfig, libftdi, pciutils, fetchpatch, fetchgit }:
 
 stdenv.mkDerivation rec {
   pname = "flashrom";
   version = "1.1";
 
-  src = fetchurl {
-    url = "https://download.flashrom.org/releases/flashrom-v${version}.tar.bz2";
-    sha256 = "06afq680n9p34hi3vrkn12vd1pfyq2062db9qqbi4hi21k3skbdf";
+  src = fetchgit {
+    url = "https://review.coreboot.org/flashrom.git";
+    rev = "370a9f3eea20a575f32ebf6ecead7ccf7562a2c0";
+    sha256 = "16bfc12cfr1p0qfvvis85bmwxjzkrznz2cnmz0hrwsfqz83cd1yz";
   };
 
   # Newer versions of libusb deprecate some API flashrom uses.
@@ -14,6 +15,12 @@ stdenv.mkDerivation rec {
   #  substituteInPlace Makefile \
   #    --replace "-Werror" "-Werror -Wno-error=deprecated-declarations -Wno-error=unused-const-variable="
   #'';
+  patches = [
+    (fetchpatch {
+      url = "https://paste.flashrom.org/view.php?id=3252";
+      sha256 = "1d7c24zw2zbbqlx0m8b33wwmgrk97xbb1zqqpp077r4n3b7p9gc8";
+    })
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libftdi pciutils ];

@@ -54,6 +54,10 @@ rec {
     config = "aarch64-unknown-linux-gnu";
   };
 
+  aarch64_be-multiplatform = {
+    config = "aarch64_be-unknown-linux-gnu";
+  };
+
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rustc.config = "armv7-linux-androideabi";

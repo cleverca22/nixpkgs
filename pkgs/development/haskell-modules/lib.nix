@@ -234,11 +234,6 @@ rec {
    */
   documentationTarball = compose.documentationTarball;
 
-  /* Use the gold linker. It is a linker for ELF that is designed
-     "to run as fast as possible on modern systems"
-   */
-  linkWithGold = compose.linkWithGold;
-
   /* link executables statically against haskell libs to reduce
      closure size
    */

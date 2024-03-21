@@ -15670,10 +15670,11 @@ with pkgs;
   gbforth = callPackage ../development/compilers/gbforth { };
 
   default-gcc-version =
-    if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-    else if stdenv.buildPlatform.isDarwin  then 12  # unable to test
-    else 13;
-  gcc = pkgs.${"gcc${toString default-gcc-version}"};
+    if stdenv.targetPlatform.isVc4 then "vc4"
+    else if stdenv.targetPlatform.libc == "relibc" then "6"
+    else if stdenv.buildPlatform.isDarwin  then "12"  # unable to test
+    else "13";
+  gcc = pkgs.${"gcc${default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
 
@@ -18379,11 +18380,14 @@ with pkgs;
 
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
-  binutils-unwrapped = callPackage ../development/tools/misc/binutils {
+  binutils-vc4-unwrapped = callPackage ../development/tools/misc/binutils/vc4.nix {};
+  gcc-vc4-unwrapped = callPackage ../development/compilers/gcc/vc4.nix {};
+
+  binutils-unwrapped = if stdenv.targetPlatform.isVc4 then binutils-vc4-unwrapped else (callPackage ../development/tools/misc/binutils {
     autoreconfHook = autoreconfHook269;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
-  };
+  });
   binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
     autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
     # FHS sys dirs presumably only have stuff for the build platform

@@ -45,6 +45,7 @@
 , libXrender ? null, xorgproto ? null
 , libXrandr ? null, libXi ? null
 , x11Support ? langJava
+, fetchFromGitHub
 }:
 
 let
@@ -230,7 +231,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
   pname = "${crossNameAddon}${name}";
   inherit version;
 
-  src = if is6 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
+  src = builtins.trace "foo ${majorVersion} ${stdenv.targetPlatform.system}" (if is6 && stdenv.targetPlatform.isVc4 then fetchFromGitHub {
     owner = "itszor";
     repo = "gcc-vc4";
     rev = "e90ff43f9671c760cf0d1dd62f569a0fb9bf8918";
@@ -248,7 +249,7 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
           else "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     ${if is10 || is11 || is13 then "hash" else "sha256"} =
       versions.srcHashForVersion version;
-  };
+  });
 
   inherit patches;
 

@@ -18,7 +18,7 @@ let
   gccForMajorMinorVersion = majorMinorVersion:
     let
       atLeast = lib.versionAtLeast majorMinorVersion;
-      attrName = "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
+      attrName = builtins.trace "bar ${majorMinorVersion}" "gcc${lib.replaceStrings ["."] [""] majorMinorVersion}";
       pkg = lowPrio (wrapCC (callPackage ./default.nix ({
         inherit noSysDirs;
         inherit majorMinorVersion;
@@ -41,7 +41,7 @@ let
                 else          /* 4.8 */    cloog;
       } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
         # gcc 10 is too strict to cross compile gcc <= 8
-        stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+        stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then stdenv else stdenv;
       })));
     in
       lib.nameValuePair attrName pkg;

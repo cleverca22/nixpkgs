@@ -171,7 +171,9 @@ stdenv.mkDerivation ({
   '';
 
   # Hack around weird upsream RPATH bug
-  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+  postInstall = ''
+    mkdir -p $out
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM && stdenv.hostPlatform.isLinux) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o

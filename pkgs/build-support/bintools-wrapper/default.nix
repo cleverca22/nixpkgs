@@ -125,6 +125,7 @@ let
     # ARM with a wildcard, which can be "" or "-armhf".
     else if (with targetPlatform; isAarch32 && isLinux)   then "${sharedLibraryLoader}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${sharedLibraryLoader}/lib/ld-linux-aarch64.so.1"
+    else if targetPlatform.system == "aarch64_be-linux" then "${sharedLibraryLoader}/lib/ld-linux-aarch64_be.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${sharedLibraryLoader}/lib/ld.so.1"
     else if targetPlatform.isMips                     then "${sharedLibraryLoader}/lib/ld.so.1"
     # `ld-linux-riscv{32,64}-<abi>.so.1`

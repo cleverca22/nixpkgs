@@ -150,7 +150,7 @@ stdenv.mkDerivation rec {
     changelog   = "https://git.musl-libc.org/cgit/musl/tree/WHATSNEW?h=v${version}";
     license     = licenses.mit;
     platforms   = [
-      "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
+      "aarch64-linux" "aarch64_be-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
       "armv7l-linux" "i686-linux" "x86_64-linux" "m68k-linux"
       "microblaze-linux" "microblazeel-linux" "mips-linux" "mips64-linux"
       "mipsel-linux" "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"

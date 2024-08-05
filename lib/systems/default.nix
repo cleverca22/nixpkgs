@@ -261,7 +261,7 @@ let
       let
         selectEmulator = pkgs:
           let
-            qemu-user = pkgs.qemu.override {
+            qemu-user = pkgs.pkgsStatic.qemu.override {
               smartcardSupport = false;
               spiceSupport = false;
               openGLSupport = false;

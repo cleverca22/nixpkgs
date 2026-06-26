@@ -1,21 +1,27 @@
 {
   stdenv,
   lib,
+  arp-scan,
+  cmake,
+  curl,
   fetchFromGitHub,
   fetchurl,
-  cmake,
-  makeWrapper,
-  pkg-config,
-  curl,
   ffmpeg,
   glib,
+  iproute2,
   libjpeg,
+  libmysqlclient,
   libselinux,
   libsepol,
-  mp4v2,
-  libmysqlclient,
+  libsysprof-capture,
+  makeWrapper,
   mariadb,
-  pcre,
+  mosquitto,
+  mp4v2,
+  net-tools,
+  nlohmann_json,
+  pcre2,
+  pkg-config,
   perl,
   perlPackages,
   polkit,
@@ -83,13 +89,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.38";
+  version = "1.39.11";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-c/Q+h0ntJ4XUuvgrLSlWfue4GL4nGARgmXt0En334Y4=";
+    hash = "sha256-BSOKsR+mxXvXCpPhXCB488hSZ/StHxN/XaqUreCcyFc=";
     fetchSubmodules = true;
   };
 
@@ -110,7 +116,6 @@ stdenv.mkDerivation rec {
     for d in scripts/ZoneMinder onvif/{modules,proxy} ; do
       substituteInPlace $d/CMakeLists.txt \
         --replace 'DESTDIR="''${CMAKE_CURRENT_BINARY_DIR}/output"' "PREFIX=$out INSTALLDIRS=site"
-      sed -i '/^install/d' $d/CMakeLists.txt
     done
 
     substituteInPlace misc/CMakeLists.txt \
@@ -162,16 +167,22 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    arp-scan
     curl
     ffmpeg
     glib
+    iproute2
     libjpeg
+    libmysqlclient
     libselinux
     libsepol
-    mp4v2
-    libmysqlclient
+    libsysprof-capture
     mariadb
-    pcre
+    mosquitto
+    mp4v2
+    net-tools
+    nlohmann_json
+    pcre2
     perl
     polkit
     x264
@@ -214,6 +225,7 @@ stdenv.mkDerivation rec {
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
+    "-DZM_PERL_INSTALL_PATH=${builtins.placeholder "out"}/${perl.libPrefix}/${perl.version}"
   ];
 
   passthru = {

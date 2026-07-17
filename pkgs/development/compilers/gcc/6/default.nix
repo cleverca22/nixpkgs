@@ -64,6 +64,10 @@ let majorVersion = "6";
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
+      ++ optionals targetPlatform.isVc4 [
+        ./switch.patch
+        ./special-regs.patch
+      ]
       ++ optional (targetPlatform.libc == "musl") ../libgomp-dont-force-initial-exec.patch
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) (fetchpatch {
         url = "https://raw.githubusercontent.com/lhmouse/MINGW-packages/${import ../common/mfcgthreads-patches-repo.nix}/mingw-w64-gcc-git/9000-gcc-${majorVersion}-branch-Added-mcf-thread-model-support-from-mcfgthread.patch";

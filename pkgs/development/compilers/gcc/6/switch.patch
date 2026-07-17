@@ -1,0 +1,13 @@
+diff --git a/gcc/config/vc4/vc4.md b/gcc/config/vc4/vc4.md
+index ef265b04f19..fd5c399b517 100644
+--- a/gcc/config/vc4/vc4.md
++++ b/gcc/config/vc4/vc4.md
+@@ -1166,7 +1166,7 @@
+ (define_insn "vc4_casesi"
+   [(parallel [(set (pc)
+ 	        (if_then_else
+-		  (leu (match_operand:SI 0 "s_register_operand" "r")
++		  (leu (match_operand:SI 0 "s_register_operand" "f")
+ 		       (match_operand:SI 1 "alu_rhs_operand" "i"))
+ 		  (plus:SI (label_ref (match_operand 2 "" ""))
+ 			   (mem:SI

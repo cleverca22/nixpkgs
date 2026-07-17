@@ -1,0 +1,13 @@
+diff --git a/gcc/config/vc4/vc4.h b/gcc/config/vc4/vc4.h
+index 86ee69a5d47..cd7dde3f890 100644
+--- a/gcc/config/vc4/vc4.h
++++ b/gcc/config/vc4/vc4.h
+@@ -336,7 +336,7 @@ enum reg_class {
+ {					\
+   { 0x00000000, 0x0 },  /* NO_REGS */	\
+   { 0x0000ffff, 0x0 },  /* FAST_REGS */ \
+-  { 0x07ffffff, 0x0 },  /* GENERAL_REGS */	\
++  { 0xffffffff, 0x0 },  /* GENERAL_REGS */	\
+   { 0xf8000000, 0x0 },  /* SPECIAL_REGS */	\
+   { 0x08000000, 0x1 },  /* AFP_REG */	\
+   { 0x10000000, 0x2 },  /* SFP_REG */	\
